@@ -59,15 +59,13 @@
             border: 1px solid #000;
         }
 
-        .graphs-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .graph-container {
             width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
         }
 
         .graph {
-            margin-bottom: 20px;
             max-width: 100%;
         }
     </style>
@@ -95,9 +93,7 @@
             </div>
             <canvas id="pipeCanvas" width="600" height="300"></canvas>
         </div>
-        <div class="graphs-container">
-            <canvas id="densityGraph" class="graph" width="800" height="200"></canvas>
-            <canvas id="viscosityGraph" class="graph" width="800" height="200"></canvas>
+        <div class="graph-container">
             <canvas id="velocityGraph" class="graph" width="800" height="200"></canvas>
         </div>
     </div>
@@ -219,7 +215,7 @@
             viscosityInput.value = 50;
             updateSimulation();
             initializeParticles();
-            resetGraphs();
+            resetGraph();
         }
 
         densityInput.addEventListener('input', updateSimulation);
@@ -231,77 +227,9 @@
         animate();
 
         // Graphs
-        const densityGraphCanvas = document.getElementById('densityGraph');
-        const viscosityGraphCanvas = document.getElementById('viscosityGraph');
         const velocityGraphCanvas = document.getElementById('velocityGraph');
 
-        let densityChart, viscosityChart, velocityChart;
-
-        function createDensityGraph() {
-            densityChart = new Chart(densityGraphCanvas.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Density',
-                        data: [],
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Density'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Time'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function createViscosityGraph() {
-            viscosityChart = new Chart(viscosityGraphCanvas.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Viscosity',
-                        data: [],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Viscosity'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Time'
-                            }
-                        }
-                    }
-                }
-            });
-        }
+        let velocityChart;
 
         function createVelocityGraph() {
             velocityChart = new Chart(velocityGraphCanvas.getContext('2d'), {
@@ -344,22 +272,6 @@
             chart.update();
         }
 
-        function updateDensityGraph() {
-            const newData = {
-                label: new Date().toLocaleTimeString(),
-                value: densityInput.value
-            };
-            updateGraph(densityChart, newData);
-        }
-
-        function updateViscosityGraph() {
-            const newData = {
-                label: new Date().toLocaleTimeString(),
-                value: viscosityInput.value
-            };
-            updateGraph(viscosityChart, newData);
-        }
-
         function updateVelocityGraph() {
             const velocities = particles.map(p => p.speed);
             const averageVelocity = velocities.reduce((a, b) => a + b, 0) / velocities.length;
@@ -370,25 +282,7 @@
             updateGraph(velocityChart, newData);
         }
 
-        function updateGraphs() {
-            updateDensityGraph();
-            updateViscosityGraph();
-            updateVelocityGraph();
-        }
-
-        function resetGraphs() {
-            densityChart.data.labels = [];
-            densityChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-            densityChart.update();
-
-            viscosityChart.data.labels = [];
-            viscosityChart.data.datasets.forEach((dataset) => {
-                dataset.data = [];
-            });
-            viscosityChart.update();
-
+        function resetGraph() {
             velocityChart.data.labels = [];
             velocityChart.data.datasets.forEach((dataset) => {
                 dataset.data = [];
@@ -396,16 +290,12 @@
             velocityChart.update();
         }
 
-        createDensityGraph();
-        createViscosityGraph();
         createVelocityGraph();
 
-        densityInput.addEventListener('input', updateDensityGraph);
-        viscosityInput.addEventListener('input', updateViscosityGraph);
         densityInput.addEventListener('input', updateVelocityGraph);
         viscosityInput.addEventListener('input', updateVelocityGraph);
 
-        setInterval(updateGraphs, 1000); // Update graphs every second
+        setInterval(updateVelocityGraph, 1000); // Update graph every second
     </script>
 </body>
 </html>
