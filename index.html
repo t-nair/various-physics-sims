@@ -165,7 +165,7 @@
 
         function calculateSpeed() {
             const visc = calculateViscosity(temperature);
-            return (pressureGradient * pipeDiameter * externalForce) / (visc * density);
+            return (pressureGradient * externalForce) / (visc * density * pipeDiameter);
         }
 
         // Initialize particles
