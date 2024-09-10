@@ -77,7 +77,7 @@
 
 
         const particles = [];
-        const particleCount = 150; // Number of particles to simulate
+        const particleCount = 50; // Number of particles to simulate
 
         // Function to calculate viscosity based on temperature (simplified)
         function calculateViscosity(temp) {
@@ -209,7 +209,7 @@
             graphContainer.style.display = graphVisible ? 'block' : 'none';
             toggleGraphButton.textContent = graphVisible ? 'Hide Graph' : 'Show Graph';
         }
-        
+
         densityInput.addEventListener('input', updateSimulation);
         viscosityInput.addEventListener('input', updateSimulation);
         pressureGradientInput.addEventListener('input', updateSimulation);
