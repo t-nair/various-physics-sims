@@ -41,6 +41,7 @@
                 <div class="button-container">
                     <button id="pauseButton">Pause</button>
                     <button id="resetButton">Reset</button>
+                    <button id="toggleGraph">Show/Hide Graph</button>
                 </div>
             </div>
             <canvas id="pipeCanvas" width="600" height="300"></canvas>
@@ -51,7 +52,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-            const canvas = document.getElementById('pipeCanvas');
+        const canvas = document.getElementById('pipeCanvas');
         const ctx = canvas.getContext('2d');
 
         const densityInput = document.getElementById('density');
@@ -62,6 +63,8 @@
         const externalForceInput = document.getElementById('externalForce');
         const pauseButton = document.getElementById('pauseButton');
         const resetButton = document.getElementById('resetButton');
+        const toggleGraphButton = document.getElementById('toggleGraphButton');
+
 
         let density = parseFloat(densityInput.value);
         let viscosity = parseFloat(viscosityInput.value);
@@ -70,9 +73,11 @@
         let temperature = parseFloat(temperatureInput.value);
         let externalForce = parseFloat(externalForceInput.value);
         let paused = false;
+        let graphVisible = true;
+
 
         const particles = [];
-        const particleCount = 100; // Number of particles to simulate
+        const particleCount = 150; // Number of particles to simulate
 
         // Function to calculate viscosity based on temperature (simplified)
         function calculateViscosity(temp) {
@@ -198,6 +203,13 @@
             resetGraph();
         }
 
+        function toggleGraph() {
+            graphVisible = !graphVisible;
+            const graphContainer = document.querySelector('.graph-container');
+            graphContainer.style.display = graphVisible ? 'block' : 'none';
+            toggleGraphButton.textContent = graphVisible ? 'Hide Graph' : 'Show Graph';
+        }
+        
         densityInput.addEventListener('input', updateSimulation);
         viscosityInput.addEventListener('input', updateSimulation);
         pressureGradientInput.addEventListener('input', updateSimulation);
@@ -206,6 +218,9 @@
         externalForceInput.addEventListener('input', updateSimulation);
         pauseButton.addEventListener('click', pauseSimulation);
         resetButton.addEventListener('click', resetSimulation);
+        toggleGraphButton.addEventListener('click', toggleGraph);
+
+
 
         drawPipe();
         animate();
